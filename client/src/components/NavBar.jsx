@@ -26,9 +26,15 @@ function NavBar() {
           <Link to="/login" className={`nav-link ${isActive('/login') ? 'active' : ''}`}>
             Login
           </Link>
-          <Link to="#" className="nav-link">HR Policy</Link>
-          <Link to="#" className="nav-link">Employee Policy</Link>
-          <Link to="#" className="nav-link">About</Link>
+          <Link to="/hr/policy" className={`nav-link ${isActive('/hr/policy') ? 'active' : ''}`}>
+            HR Policy
+          </Link>
+          <Link to="/employee/policy" className={`nav-link ${isActive('/employee/policy') ? 'active' : ''}`}>
+            Employee Policy
+          </Link>
+          <Link to="/about" className={`nav-link ${isActive('/about') ? 'active' : ''}`}>
+            About
+          </Link>
         </div>
       </div>
     </nav>

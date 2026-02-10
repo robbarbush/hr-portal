@@ -6,9 +6,10 @@ import { getEmployeeByEmail } from '../api/employees';
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('hr');
+  const [role, setRole] = useState('employee');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -20,12 +21,18 @@ function Login() {
     try {
       if (role === 'hr') {
         login({ id: 0, name: 'HR Admin', email: 'hr@company.com' }, 'hr');
-        navigate('/hr');
+        setShowSuccess(true);
+        setTimeout(() => {
+          navigate('/hr');
+        }, 1500);
       } else {
         const employee = await getEmployeeByEmail(username);
         if (employee) {
           login(employee, 'employee');
-          navigate('/employee');
+          setShowSuccess(true);
+          setTimeout(() => {
+            navigate('/employee');
+          }, 1500);
         } else {
           setError('Employee not found. Please check your username or sign up.');
         }
@@ -80,7 +87,7 @@ function Login() {
                 checked={role === 'hr'}
                 onChange={(e) => setRole(e.target.value)}
               />
-              Hr
+              HR
             </label>
           </div>
           <button type="submit" className="btn btn-primary btn-login" disabled={isLoading}>
@@ -90,7 +97,23 @@ function Login() {
         <div className="signup-link">
           <Link to="/signup">SignUp</Link>
         </div>
+        <div className="demo-credentials">
+          <strong>Demo Credentials:</strong>
+          <p><strong>HR:</strong> Select "HR" and click Login</p>
+          <p><strong>Employee:</strong> Select "Employee" and enter:</p>
+          <p>john.smith@company.com</p>
+        </div>
       </div>
+
+      {showSuccess && (
+        <div className="modal-overlay">
+          <div className="success-dialog">
+            <div className="success-icon">✓</div>
+            <h2>Login Successful!</h2>
+            <p>Redirecting to dashboard...</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

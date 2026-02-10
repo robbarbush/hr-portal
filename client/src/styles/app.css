@@ -1,16 +1,130 @@
-* {
+/* =============================================================================
+   HR PORTAL - MAIN STYLESHEET
+   =============================================================================
+   Table of Contents:
+   1. CSS Variables (Design Tokens)
+   2. Reset & Base Styles
+   3. Layout
+   4. Navigation
+   5. Buttons
+   6. Forms
+   7. Cards & Containers
+   8. Tables
+   9. Modals & Dialogs
+   10. Badges & Status
+   11. Alerts
+   12. Dashboard Components
+   13. Utility Classes
+   14. Responsive
+   ============================================================================= */
+
+/* =============================================================================
+   1. CSS VARIABLES (DESIGN TOKENS)
+   ============================================================================= */
+:root {
+  /* Colors - Primary */
+  --color-primary: #007bff;
+  --color-primary-hover: #0056b3;
+  
+  /* Colors - Secondary */
+  --color-secondary: #6c757d;
+  --color-secondary-hover: #545b62;
+  
+  /* Colors - Status */
+  --color-success: #28a745;
+  --color-success-hover: #1e7e34;
+  --color-danger: #dc3545;
+  --color-danger-hover: #c82333;
+  --color-warning: #ffc107;
+  
+  /* Colors - Neutral */
+  --color-white: #ffffff;
+  --color-gray-50: #f8f9fa;
+  --color-gray-100: #f5f5f5;
+  --color-gray-200: #e9ecef;
+  --color-gray-300: #dee2e6;
+  --color-gray-400: #ccc;
+  --color-gray-500: #999;
+  --color-gray-600: #666;
+  --color-gray-700: #555;
+  --color-gray-800: #333;
+  
+  /* Colors - Brand */
+  --color-brand-orange: #e67e22;
+  --color-brand-orange-light: #f39c12;
+  
+  /* Colors - Alerts */
+  --color-alert-error-bg: #f8d7da;
+  --color-alert-error-text: #721c24;
+  --color-alert-error-border: #f5c6cb;
+  --color-alert-success-bg: #d4edda;
+  --color-alert-success-text: #155724;
+  --color-alert-success-border: #c3e6cb;
+  --color-alert-info-bg: #e7f3ff;
+  --color-alert-info-text: #004085;
+  --color-alert-info-border: #b3d7ff;
+  
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.5rem;
+  --line-height: 1.6;
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  /* Borders */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-full: 50%;
+  
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 4px 20px rgba(0, 0, 0, 0.3);
+  
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+}
+
+/* =============================================================================
+   2. RESET & BASE STYLES
+   ============================================================================= */
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-  background-color: #f5f5f5;
-  color: #333;
-  line-height: 1.6;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height);
+  color: var(--color-gray-800);
+  background-color: var(--color-gray-100);
 }
 
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* =============================================================================
+   3. LAYOUT
+   ============================================================================= */
 .app {
   min-height: 100vh;
   display: flex;
@@ -21,17 +135,45 @@ body {
   flex: 1;
 }
 
-/* Navbar - matches screenshot */
+.page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 70px);
+  padding: var(--spacing-xl);
+}
+
+.dashboard {
+  padding: var(--spacing-xl);
+}
+
+.dashboard h1 {
+  color: var(--color-gray-800);
+  font-size: var(--font-size-xl);
+  font-weight: 500;
+  margin-bottom: var(--spacing-lg);
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* =============================================================================
+   4. NAVIGATION
+   ============================================================================= */
 .navbar {
-  background-color: #e9ecef;
-  padding: 0.5rem 1rem;
-  border-bottom: 1px solid #ddd;
+  background-color: var(--color-gray-200);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid var(--color-gray-300);
 }
 
 .navbar-container {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--spacing-md);
 }
 
 .navbar-logo {
@@ -42,20 +184,20 @@ body {
 .logo-circle {
   width: 45px;
   height: 45px;
-  background-color: #e67e22;
-  border-radius: 50%;
+  background-color: var(--color-brand-orange);
+  border-radius: var(--border-radius-full);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--color-white);
   font-weight: bold;
-  font-size: 12px;
+  font-size: var(--font-size-xs);
   line-height: 1;
 }
 
 .logo-circle span:first-child {
-  font-size: 14px;
+  font-size: var(--font-size-sm);
 }
 
 .logo-small {
@@ -68,32 +210,42 @@ body {
 }
 
 .nav-link {
-  color: #333;
+  color: var(--color-gray-800);
   text-decoration: none;
-  padding: 0.5rem 1rem;
-  font-size: 14px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-sm);
   border: 1px solid transparent;
+  transition: background-color var(--transition-fast);
 }
 
 .nav-link:hover {
-  background-color: #fff;
+  background-color: var(--color-white);
+  text-decoration: none;
 }
 
 .nav-link.active {
-  border: 1px solid #ccc;
-  background-color: #fff;
+  border-color: var(--color-gray-400);
+  background-color: var(--color-white);
 }
 
-/* Buttons */
+/* =============================================================================
+   5. BUTTONS
+   ============================================================================= */
 .btn {
-  padding: 0.4rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  text-decoration: none;
   display: inline-block;
-  transition: background-color 0.2s;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-sm);
+  font-weight: 400;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.btn:hover {
+  text-decoration: none;
 }
 
 .btn:disabled {
@@ -102,101 +254,108 @@ body {
 }
 
 .btn-primary {
-  background-color: #007bff;
-  color: white;
+  background-color: var(--color-primary);
+  color: var(--color-white);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: #0056b3;
+  background-color: var(--color-primary-hover);
 }
 
 .btn-secondary {
-  background-color: #6c757d;
-  color: white;
+  background-color: var(--color-secondary);
+  color: var(--color-white);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background-color: #545b62;
+  background-color: var(--color-secondary-hover);
 }
 
 .btn-success {
-  background-color: #28a745;
-  color: white;
+  background-color: var(--color-success);
+  color: var(--color-white);
 }
 
 .btn-success:hover:not(:disabled) {
-  background-color: #1e7e34;
+  background-color: var(--color-success-hover);
 }
 
 .btn-danger {
-  background-color: #dc3545;
-  color: white;
+  background-color: var(--color-danger);
+  color: var(--color-white);
 }
 
 .btn-danger:hover:not(:disabled) {
-  background-color: #c82333;
+  background-color: var(--color-danger-hover);
 }
 
 .btn-sm {
-  padding: 0.25rem 0.5rem;
-  font-size: 12px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-xs);
 }
 
-/* Login Page - matches screenshot exactly */
-.page-container {
+.btn-block {
+  width: 100%;
+}
+
+.btn-login {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  margin-top: var(--spacing-sm);
+}
+
+.action-buttons {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: calc(100vh - 70px);
-  padding: 2rem;
+  gap: var(--spacing-sm);
 }
 
-.login-card {
-  background: white;
-  padding: 2rem 3rem;
-  border: 1px solid #dc3545;
-  border-radius: 4px;
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
+/* =============================================================================
+   6. FORMS
+   ============================================================================= */
+.form-group {
+  margin-bottom: var(--spacing-md);
 }
 
-.login-card h1 {
-  margin-bottom: 1.5rem;
-  color: #333;
-  font-size: 24px;
+.form-group label {
+  display: block;
+  margin-bottom: var(--spacing-sm);
   font-weight: 500;
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-700);
 }
 
-.login-card .form-group {
-  margin-bottom: 1rem;
-}
-
-.login-card .form-control {
+.form-control {
   width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 0;
-  font-size: 14px;
+  padding: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+  border: 1px solid var(--color-gray-400);
+  border-radius: var(--border-radius-sm);
+  transition: border-color var(--transition-fast);
 }
 
-.login-card .form-control:focus {
+.form-control:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: var(--color-primary);
 }
 
+textarea.form-control {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Role Selector (Radio Buttons) */
 .role-selector {
   display: flex;
   justify-content: center;
-  gap: 1.5rem;
-  margin: 1rem 0;
+  gap: var(--spacing-lg);
+  margin: var(--spacing-md) 0;
 }
 
 .radio-label {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
-  font-size: 14px;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-sm);
   cursor: pointer;
 }
 
@@ -204,208 +363,149 @@ body {
   cursor: pointer;
 }
 
-.btn-login {
-  padding: 0.4rem 1.5rem;
-  margin-top: 0.5rem;
+/* Form Footer */
+.form-footer {
+  margin-top: var(--spacing-lg);
+  text-align: center;
+  color: var(--color-gray-600);
 }
 
 .signup-link {
-  margin-top: 1rem;
+  margin-top: var(--spacing-md);
 }
 
-.signup-link a {
-  color: #007bff;
-  text-decoration: none;
+/* =============================================================================
+   7. CARDS & CONTAINERS
+   ============================================================================= */
+.card {
+  background: var(--color-white);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-lg);
 }
 
-.signup-link a:hover {
-  text-decoration: underline;
+.card h2 {
+  color: var(--color-gray-800);
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--color-gray-200);
 }
 
-/* Signup Page */
+/* Login Card */
+.login-card {
+  background: var(--color-white);
+  padding: var(--spacing-xl) calc(var(--spacing-xl) + var(--spacing-sm));
+  border: 1px solid var(--color-danger);
+  border-radius: var(--border-radius-sm);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-card h1 {
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-gray-800);
+  font-size: var(--font-size-xl);
+  font-weight: 500;
+}
+
+.login-card .form-control {
+  border-radius: 0;
+}
+
+/* Signup / Form Card */
 .form-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background: var(--color-white);
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
   width: 100%;
   max-width: 450px;
 }
 
 .form-card h1 {
-  margin-bottom: 1.5rem;
-  color: #333;
-  text-align: center;
-}
-
-.form-group {
-  margin-bottom: 1rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-gray-800);
+  font-size: var(--font-size-xl);
   font-weight: 500;
-  color: #555;
-  font-size: 14px;
-}
-
-.form-control {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.form-control:focus {
-  outline: none;
-  border-color: #007bff;
-}
-
-textarea.form-control {
-  resize: vertical;
-}
-
-.form-footer {
-  margin-top: 1.5rem;
   text-align: center;
-  color: #666;
 }
 
-.form-footer a {
-  color: #007bff;
-  text-decoration: none;
+/* Demo Credentials Box */
+.demo-credentials {
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background-color: var(--color-alert-info-bg);
+  border: 1px solid var(--color-alert-info-border);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  text-align: left;
 }
 
-.form-footer a:hover {
-  text-decoration: underline;
+.demo-credentials strong {
+  color: var(--color-alert-info-text);
 }
 
-.btn-block {
-  width: 100%;
+.demo-credentials p {
+  margin: var(--spacing-xs) 0;
+  color: var(--color-alert-info-text);
 }
 
-/* Alerts */
-.alert {
-  padding: 0.75rem 1rem;
-  border-radius: 4px;
-  margin-bottom: 1rem;
-  font-size: 14px;
-}
-
-.alert-error {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
-
-.alert-success {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-
-/* HR Dashboard - matches screenshot */
-.hr-dashboard {
-  padding: 1rem 2rem;
-  background-color: #fff;
-  min-height: calc(100vh - 70px);
-}
-
-.dashboard-header {
+/* Profile Info */
+.profile-info {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.dashboard-title {
-  color: #dc3545;
-  font-size: 24px;
-  font-weight: 500;
-}
-
-.logout-btn {
-  background: none;
-  border: none;
-  color: #007bff;
-  cursor: pointer;
-  font-size: 14px;
+.profile-row {
   display: flex;
-  align-items: center;
-  gap: 0.3rem;
 }
 
-.logout-btn:hover {
-  text-decoration: underline;
-}
-
-.logout-icon {
-  font-size: 16px;
-}
-
-.add-employee-section {
-  margin-bottom: 1rem;
-}
-
-.add-employee-card {
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 1rem 1.5rem;
-  display: inline-block;
-  text-align: center;
-}
-
-.add-employee-card h3 {
-  font-size: 16px;
+.profile-row .label {
   font-weight: 500;
-  margin-bottom: 0.75rem;
-  color: #333;
+  color: var(--color-gray-600);
+  width: 120px;
+  flex-shrink: 0;
 }
 
-.divider {
-  height: 2px;
-  background: linear-gradient(to right, #e67e22, #f39c12);
-  margin: 1.5rem 0;
+.profile-row .value {
+  color: var(--color-gray-800);
 }
 
-.section {
-  margin-bottom: 2rem;
-}
-
-.section h2 {
-  font-size: 18px;
-  margin-bottom: 1rem;
-  color: #333;
-}
-
-/* Tables */
+/* =============================================================================
+   8. TABLES
+   ============================================================================= */
 .table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
+  background: var(--color-white);
 }
 
 .table th,
 .table td {
   padding: 0.75rem;
   text-align: left;
-  border-bottom: 1px solid #dee2e6;
-  font-size: 14px;
+  font-size: var(--font-size-sm);
+  border-bottom: 1px solid var(--color-gray-300);
 }
 
 .table th {
-  background-color: #f8f9fa;
+  background-color: var(--color-gray-50);
   font-weight: 600;
-  color: #333;
+  color: var(--color-gray-800);
 }
 
 .table tbody tr:hover {
-  background-color: #f8f9fa;
+  background-color: var(--color-gray-50);
 }
 
-/* Modal - matches screenshot */
+/* =============================================================================
+   9. MODALS & DIALOGS
+   ============================================================================= */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -420,79 +520,102 @@ textarea.form-control {
 }
 
 .modal {
-  background: white;
-  border-radius: 4px;
+  background: var(--color-white);
+  border-radius: var(--border-radius-sm);
   width: 100%;
   max-width: 500px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-lg);
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid #dee2e6;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--color-gray-300);
 }
 
 .modal-header h2 {
-  font-size: 18px;
+  font-size: var(--font-size-lg);
   font-weight: 500;
-  color: #333;
+  color: var(--color-gray-800);
 }
 
 .modal-close {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: var(--font-size-xl);
   cursor: pointer;
-  color: #666;
+  color: var(--color-gray-600);
   line-height: 1;
+  padding: 0;
 }
 
 .modal-close:hover {
-  color: #333;
+  color: var(--color-gray-800);
 }
 
 .modal-body {
-  padding: 1.5rem;
-}
-
-.modal-body .form-group {
-  margin-bottom: 1rem;
+  padding: var(--spacing-lg);
 }
 
 .modal-body .form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-size: 14px;
-  color: #333;
-}
-
-.modal-body .form-control {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
+  color: var(--color-gray-800);
 }
 
 .modal-footer {
   display: flex;
   justify-content: flex-end;
-  gap: 0.5rem;
-  padding: 1rem 1.5rem;
-  border-top: 1px solid #dee2e6;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-top: 1px solid var(--color-gray-300);
 }
 
-/* Badges */
+/* Success Dialog */
+.success-dialog {
+  background: var(--color-white);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-xl) calc(var(--spacing-xl) + var(--spacing-md));
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.success-icon {
+  width: 60px;
+  height: 60px;
+  background-color: var(--color-success);
+  border-radius: var(--border-radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-md);
+  color: var(--color-white);
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.success-dialog h2 {
+  color: var(--color-success);
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  margin-bottom: var(--spacing-sm);
+}
+
+.success-dialog p {
+  color: var(--color-gray-600);
+  margin: 0;
+}
+
+/* =============================================================================
+   10. BADGES & STATUS
+   ============================================================================= */
 .badge {
   display: inline-block;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 12px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-xs);
   font-weight: 500;
   text-transform: capitalize;
+  border-radius: var(--border-radius-sm);
 }
 
 .badge-pending {
@@ -501,105 +624,171 @@ textarea.form-control {
 }
 
 .badge-approved {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: var(--color-alert-success-bg);
+  color: var(--color-alert-success-text);
 }
 
 .badge-denied {
-  background-color: #f8d7da;
-  color: #721c24;
+  background-color: var(--color-alert-error-bg);
+  color: var(--color-alert-error-text);
 }
 
-/* Action Buttons */
-.action-buttons {
+/* =============================================================================
+   11. ALERTS
+   ============================================================================= */
+.alert {
+  padding: 0.75rem var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-sm);
+}
+
+.alert-error {
+  background-color: var(--color-alert-error-bg);
+  color: var(--color-alert-error-text);
+  border: 1px solid var(--color-alert-error-border);
+}
+
+.alert-success {
+  background-color: var(--color-alert-success-bg);
+  color: var(--color-alert-success-text);
+  border: 1px solid var(--color-alert-success-border);
+}
+
+/* =============================================================================
+   12. DASHBOARD COMPONENTS
+   ============================================================================= */
+
+/* HR Dashboard */
+.hr-dashboard {
+  padding: var(--spacing-md) var(--spacing-xl);
+  background-color: var(--color-white);
+  min-height: calc(100vh - 70px);
+}
+
+.dashboard-header {
   display: flex;
-  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
 }
 
-/* Loading & Empty States */
+.dashboard-title {
+  color: var(--color-danger);
+  font-size: var(--font-size-xl);
+  font-weight: 500;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.logout-btn:hover {
+  text-decoration: underline;
+}
+
+.logout-icon {
+  font-size: 1rem;
+}
+
+/* Add Employee Section */
+.add-employee-section {
+  margin-bottom: var(--spacing-md);
+}
+
+.add-employee-card {
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
+  display: inline-block;
+  text-align: center;
+}
+
+.add-employee-card h3 {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  color: var(--color-gray-800);
+}
+
+/* Divider */
+.divider {
+  height: 2px;
+  background: linear-gradient(to right, var(--color-brand-orange), var(--color-brand-orange-light));
+  margin: var(--spacing-lg) 0;
+}
+
+/* Section */
+.section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.section h2 {
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-gray-800);
+}
+
+/* =============================================================================
+   13. UTILITY CLASSES
+   ============================================================================= */
 .loading {
   text-align: center;
-  padding: 2rem;
-  color: #666;
+  padding: var(--spacing-xl);
+  color: var(--color-gray-600);
 }
 
 .empty-state {
   text-align: center;
-  padding: 2rem;
-  color: #999;
+  padding: var(--spacing-xl);
+  color: var(--color-gray-500);
 }
 
-/* Employee Dashboard */
-.dashboard {
-  padding: 2rem;
-}
-
-.dashboard h1 {
-  color: #333;
-  margin-bottom: 1.5rem;
-}
-
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.card {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  margin-bottom: 1.5rem;
-}
-
-.card h2 {
-  color: #333;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid #eee;
-  font-size: 18px;
-}
-
-.profile-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.profile-row {
-  display: flex;
-}
-
-.profile-row .label {
-  font-weight: 500;
-  color: #666;
-  width: 120px;
-}
-
-.profile-row .value {
-  color: #333;
-}
-
-/* Responsive */
+/* =============================================================================
+   14. RESPONSIVE
+   ============================================================================= */
 @media (max-width: 768px) {
   .navbar-container {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--spacing-sm);
   }
-  
+
   .navbar-links {
     flex-wrap: wrap;
     justify-content: center;
   }
-  
+
+  .dashboard {
+    padding: var(--spacing-md);
+  }
+
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .modal {
-    margin: 1rem;
-    max-width: calc(100% - 2rem);
+    margin: var(--spacing-md);
+    max-width: calc(100% - var(--spacing-xl));
+  }
+
+  .table {
+    font-size: var(--font-size-xs);
+  }
+
+  .table th,
+  .table td {
+    padding: var(--spacing-sm);
+  }
+
+  .hr-dashboard {
+    padding: var(--spacing-md);
   }
 }
