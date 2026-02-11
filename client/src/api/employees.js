@@ -1,4 +1,4 @@
-import { httpGet, httpPost } from './http';
+import { httpGet, httpPost, httpPatch, httpDelete } from './http';
 
 export async function getAllEmployees() {
   return httpGet('/employees');
@@ -15,4 +15,12 @@ export async function getEmployeeByEmail(email) {
 
 export async function createEmployee(employeeData) {
   return httpPost('/employees', employeeData);
+}
+
+export async function updateEmployee(id, employeeData) {
+  return httpPatch(`/employees/${id}`, employeeData);
+}
+
+export async function deleteEmployee(id) {
+  return httpDelete(`/employees/${id}`);
 }

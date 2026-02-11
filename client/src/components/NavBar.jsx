@@ -41,13 +41,22 @@ function NavBar() {
         </button>
 
         <div className={`navbar-links ${menuOpen ? 'active' : ''}`}>
-          <Link 
-            to="/login" 
-            className={`nav-link ${isActive('/login') ? 'active' : ''}`}
-            onClick={handleLinkClick}
-          >
-            Login
-          </Link>
+          {isAuthenticated ? (
+            <button 
+              className={`nav-link nav-logout-link`}
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          ) : (
+            <Link 
+              to="/login" 
+              className={`nav-link ${isActive('/login') ? 'active' : ''}`}
+              onClick={handleLinkClick}
+            >
+              Login
+            </Link>
+          )}
           <Link 
             to="/hr/policy" 
             className={`nav-link ${isActive('/hr/policy') ? 'active' : ''}`}

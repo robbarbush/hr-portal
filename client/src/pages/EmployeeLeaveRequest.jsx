@@ -16,6 +16,15 @@ function EmployeeLeaveRequest() {
   });
   const [dateError, setDateError] = useState('');
 
+  // Get tomorrow's date as minimum start date
+  const getTomorrowDate = () => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow.toISOString().split('T')[0];
+  };
+
+  const minStartDate = getTomorrowDate();
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -27,14 +36,18 @@ function EmployeeLeaveRequest() {
   };
 
   const validateDates = () => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
     
     const start = new Date(formData.startDate);
+    start.setHours(0, 0, 0, 0);
+    
     const end = new Date(formData.endDate);
+    end.setHours(0, 0, 0, 0);
 
-    if (start < today) {
-      setDateError('Start date cannot be in the past');
+    if (start < tomorrow) {
+      setDateError('Start date must be tomorrow or later');
       return false;
     }
 
@@ -43,7 +56,7 @@ function EmployeeLeaveRequest() {
       return false;
     }
 
-    // Optional: limit max leave duration (e.g., 30 days)
+    // Limit max leave duration to 30 days
     const diffTime = Math.abs(end - start);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     if (diffDays > 30) {
@@ -127,9 +140,10 @@ function EmployeeLeaveRequest() {
               value={formData.startDate}
               onChange={handleInputChange}
               className="form-control"
-              min={new Date().toISOString().split('T')[0]}
+              min={minStartDate}
               required
             />
+            <small className="form-hint">Earliest start date: tomorrow</small>
           </div>
           
           <div className="form-group">
@@ -140,7 +154,7 @@ function EmployeeLeaveRequest() {
               value={formData.endDate}
               onChange={handleInputChange}
               className="form-control"
-              min={formData.startDate || new Date().toISOString().split('T')[0]}
+              min={formData.startDate || minStartDate}
               required
             />
           </div>

@@ -289,6 +289,25 @@ img {
   background-color: var(--color-white);
 }
 
+/* Nav Logout Link - looks like regular nav link */
+.nav-logout-link {
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+}
+
+/* Quick Actions */
+.quick-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.quick-actions .btn {
+  width: 100%;
+}
+
 /* =============================================================================
    5. BUTTONS
    ============================================================================= */
@@ -447,6 +466,26 @@ select.form-control {
   color: var(--color-gray-600);
 }
 
+.form-hint {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: var(--color-gray-500);
+  margin-top: var(--spacing-xs);
+}
+
+/* Form Row (Two columns) */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+@media (max-width: 480px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 .signup-link {
   margin-top: var(--spacing-md);
 }
@@ -589,6 +628,15 @@ select.form-control {
 
 .table tbody tr:hover {
   background-color: var(--color-gray-50);
+}
+
+/* Highlight row for attention */
+.table tbody tr.row-highlight {
+  background-color: #fff3cd;
+}
+
+.table tbody tr.row-highlight:hover {
+  background-color: #ffecb5;
 }
 
 /* Sortable Headers */
@@ -777,6 +825,16 @@ select.form-control {
   color: var(--color-alert-error-text);
 }
 
+.badge-info {
+  background-color: var(--color-alert-info-bg);
+  color: var(--color-alert-info-text);
+}
+
+.badge-warning {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
 /* =============================================================================
    11. ALERTS
    ============================================================================= */
@@ -797,6 +855,12 @@ select.form-control {
   background-color: var(--color-alert-success-bg);
   color: var(--color-alert-success-text);
   border: 1px solid var(--color-alert-success-border);
+}
+
+.alert-warning {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffc107;
 }
 
 /* =============================================================================
@@ -886,6 +950,37 @@ select.form-control {
   color: var(--color-gray-800);
 }
 
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.section-header h2 {
+  margin-bottom: 0;
+}
+
+/* Filter Groups */
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* Text Small */
+.text-small {
+  font-size: var(--font-size-xs);
+}
+
+/* Badge Admin */
+.badge-admin {
+  background-color: #6f42c1;
+  color: white;
+}
+
 /* =============================================================================
    13. ADMIN DASHBOARD
    ============================================================================= */
@@ -914,6 +1009,11 @@ select.form-control {
 
 .stat-card.stat-denied {
   border-left: 4px solid var(--color-danger);
+}
+
+.stat-card.stat-attention {
+  border-left: 4px solid #fd7e14;
+  background-color: #fff3cd;
 }
 
 .stat-number {

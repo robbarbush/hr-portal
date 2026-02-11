@@ -1,47 +1,39 @@
-const BASE_URL = '/api';
+const API_BASE = '/api';
 
-export async function httpGet(endpoint) {
-  const response = await fetch(`${BASE_URL}${endpoint}`);
+async function handleResponse(response) {
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    const error = await response.text();
+    throw new Error(error || 'Request failed');
   }
   return response.json();
+}
+
+export async function httpGet(endpoint) {
+  const response = await fetch(`${API_BASE}${endpoint}`);
+  return handleResponse(response);
 }
 
 export async function httpPost(endpoint, data) {
-  const response = await fetch(`${BASE_URL}${endpoint}`, {
+  const response = await fetch(`${API_BASE}${endpoint}`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  return response.json();
+  return handleResponse(response);
 }
 
 export async function httpPatch(endpoint, data) {
-  const response = await fetch(`${BASE_URL}${endpoint}`, {
+  const response = await fetch(`${API_BASE}${endpoint}`, {
     method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  return response.json();
+  return handleResponse(response);
 }
 
 export async function httpDelete(endpoint) {
-  const response = await fetch(`${BASE_URL}${endpoint}`, {
+  const response = await fetch(`${API_BASE}${endpoint}`, {
     method: 'DELETE',
   });
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  return response.json();
+  return handleResponse(response);
 }

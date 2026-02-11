@@ -1,11 +1,26 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import { getAllEmployees, createEmployee } from '../api/employees';
 import { getAllLeaveRequests } from '../api/leaveRequests';
 
+const STATUS_OPTIONS = [
+  'Probationary',
+  'Active',
+  'On Leave',
+  'Suspended',
+  'Resigned',
+  'Terminated',
+  'Retired'
+];
+
+const EMPLOYMENT_TYPE_OPTIONS = [
+  'Full-Time',
+  'Part-Time',
+  'Contractor',
+  'Intern'
+];
+
 function HRDashboard() {
-  const { logout } = useAuth();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -14,7 +29,8 @@ function HRDashboard() {
     totalEmployees: 0,
     pendingRequests: 0,
     approvedRequests: 0,
-    deniedRequests: 0
+    deniedRequests: 0,
+    needsAttention: 0
   });
   const [statsLoading, setStatsLoading] = useState(true);
   const [formData, setFormData] = useState({
@@ -23,7 +39,9 @@ function HRDashboard() {
     phone: '',
     department: '',
     title: '',
-    startDate: ''
+    startDate: '',
+    status: 'Probationary',
+    employmentType: 'Full-Time'
   });
 
   useEffect(() => {
@@ -37,22 +55,20 @@ function HRDashboard() {
         getAllLeaveRequests()
       ]);
 
+      const needsAttention = employees.filter(emp => !emp.status || emp.status === '').length;
+
       setStats({
         totalEmployees: employees.length,
         pendingRequests: leaveRequests.filter(r => r.status === 'pending').length,
         approvedRequests: leaveRequests.filter(r => r.status === 'approved').length,
-        deniedRequests: leaveRequests.filter(r => r.status === 'denied').length
+        deniedRequests: leaveRequests.filter(r => r.status === 'denied').length,
+        needsAttention
       });
     } catch (error) {
       console.error('Failed to fetch stats:', error);
     } finally {
       setStatsLoading(false);
     }
-  };
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
   };
 
   const handleInputChange = (e) => {
@@ -74,7 +90,9 @@ function HRDashboard() {
         phone: '',
         department: '',
         title: '',
-        startDate: ''
+        startDate: '',
+        status: 'Probationary',
+        employmentType: 'Full-Time'
       });
       fetchStats();
     } catch (err) {
@@ -88,9 +106,6 @@ function HRDashboard() {
     <div className="hr-dashboard">
       <div className="dashboard-header">
         <h1 className="dashboard-title">HR Dashboard</h1>
-        <button className="logout-btn" onClick={handleLogout}>
-          <span className="logout-icon">↪</span> Logout
-        </button>
       </div>
 
       {/* Stats Section */}
@@ -116,6 +131,12 @@ function HRDashboard() {
               <div className="stat-number">{stats.deniedRequests}</div>
               <div className="stat-label">Denied</div>
             </div>
+            {stats.needsAttention > 0 && (
+              <div className="stat-card stat-attention">
+                <div className="stat-number">{stats.needsAttention}</div>
+                <div className="stat-label">Needs Attention</div>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -157,68 +178,104 @@ function HRDashboard() {
             <div className="modal-body">
               {error && <div className="alert alert-error">{error}</div>}
               <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <label>Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    className="form-control"
-                    required
-                  />
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Name *</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Email *</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      required
+                    />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label>Department</label>
-                  <input
-                    type="text"
-                    name="department"
-                    value={formData.department}
-                    onChange={handleInputChange}
-                    className="form-control"
-                    required
-                  />
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Phone</label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      className="form-control"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Department *</label>
+                    <input
+                      type="text"
+                      name="department"
+                      value={formData.department}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      required
+                    />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label>Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="form-control"
-                    required
-                  />
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Title</label>
+                    <input
+                      type="text"
+                      name="title"
+                      value={formData.title}
+                      onChange={handleInputChange}
+                      className="form-control"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Start Date</label>
+                    <input
+                      type="date"
+                      name="startDate"
+                      value={formData.startDate}
+                      onChange={handleInputChange}
+                      className="form-control"
+                    />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label>Phone</label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className="form-control"
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Title</label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleInputChange}
-                    className="form-control"
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Start Date</label>
-                  <input
-                    type="date"
-                    name="startDate"
-                    value={formData.startDate}
-                    onChange={handleInputChange}
-                    className="form-control"
-                  />
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Status *</label>
+                    <select
+                      name="status"
+                      value={formData.status}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      required
+                    >
+                      {STATUS_OPTIONS.map(status => (
+                        <option key={status} value={status}>{status}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>Employment Type *</label>
+                    <select
+                      name="employmentType"
+                      value={formData.employmentType}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      required
+                    >
+                      {EMPLOYMENT_TYPE_OPTIONS.map(type => (
+                        <option key={type} value={type}>{type}</option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
                 <div className="modal-footer">
                   <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>

@@ -1,181 +1,193 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { getLeaveRequestsByEmployeeId, createLeaveRequest } from '../api/leaveRequests';
-import StatusBadge from '../components/StatusBadge';
+import { getLeaveRequestsByEmployeeId } from '../api/leaveRequests';
 
 function EmployeeDashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [formData, setFormData] = useState({
-    startDate: '',
-    endDate: '',
-    reason: '',
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   useEffect(() => {
+    const fetchLeaveRequests = async () => {
+      if (user?.id) {
+        try {
+          const data = await getLeaveRequestsByEmployeeId(user.id);
+          setLeaveRequests(data);
+        } catch (error) {
+          console.error('Failed to fetch leave requests:', error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
     fetchLeaveRequests();
-  }, [user.id]);
+  }, [user]);
 
-  const fetchLeaveRequests = async () => {
-    try {
-      setIsLoading(true);
-      const data = await getLeaveRequestsByEmployeeId(user.id);
-      setLeaveRequests(data);
-    } catch (err) {
-      setError('Failed to load leave requests.');
-    } finally {
-      setIsLoading(false);
+  const getStatusBadge = (status) => {
+    return <span className={`badge badge-${status}`}>{status}</span>;
+  };
+
+  const getEmploymentStatusBadgeClass = (status) => {
+    if (!status) return 'badge-warning';
+    switch (status.toLowerCase()) {
+      case 'active': return 'badge-approved';
+      case 'probationary': return 'badge-pending';
+      case 'on leave': return 'badge-info';
+      default: return 'badge-pending';
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitSuccess(false);
-    setError('');
-
-    try {
-      await createLeaveRequest({
-        employeeId: user.id,
-        ...formData,
-      });
-      setFormData({ startDate: '', endDate: '', reason: '' });
-      setSubmitSuccess(true);
-      fetchLeaveRequests();
-    } catch (err) {
-      setError('Failed to submit leave request.');
-    } finally {
-      setIsSubmitting(false);
-    }
+  // Calculate stats
+  const stats = {
+    total: leaveRequests.length,
+    pending: leaveRequests.filter(r => r.status === 'pending').length,
+    approved: leaveRequests.filter(r => r.status === 'approved').length,
+    denied: leaveRequests.filter(r => r.status === 'denied').length
   };
 
   return (
     <div className="dashboard">
       <div className="dashboard-header">
-        <h1>Employee Dashboard</h1>
+        <h1>Welcome, {user?.name}</h1>
       </div>
 
       <div className="dashboard-grid">
+        {/* Profile Card */}
         <div className="card">
           <h2>My Profile</h2>
           <div className="profile-info">
             <div className="profile-row">
               <span className="label">Name:</span>
-              <span className="value">{user.name}</span>
+              <span className="value">{user?.name}</span>
             </div>
             <div className="profile-row">
               <span className="label">Email:</span>
-              <span className="value">{user.email}</span>
-            </div>
-            <div className="profile-row">
-              <span className="label">Phone:</span>
-              <span className="value">{user.phone}</span>
+              <span className="value">{user?.email}</span>
             </div>
             <div className="profile-row">
               <span className="label">Department:</span>
-              <span className="value">{user.department}</span>
+              <span className="value">{user?.department || '-'}</span>
             </div>
             <div className="profile-row">
               <span className="label">Title:</span>
-              <span className="value">{user.title}</span>
+              <span className="value">{user?.title || '-'}</span>
             </div>
             <div className="profile-row">
-              <span className="label">Start Date:</span>
-              <span className="value">{user.startDate}</span>
+              <span className="label">Status:</span>
+              <span className="value">
+                {user?.status ? (
+                  <span className={`badge ${getEmploymentStatusBadgeClass(user.status)}`}>
+                    {user.status}
+                  </span>
+                ) : (
+                  '-'
+                )}
+              </span>
             </div>
+            <div className="profile-row">
+              <span className="label">Type:</span>
+              <span className="value">
+                {user?.employmentType ? (
+                  <span className="badge badge-info">{user.employmentType}</span>
+                ) : (
+                  '-'
+                )}
+              </span>
+            </div>
+          </div>
+          <div style={{ marginTop: '1rem' }}>
+            <button 
+              className="btn btn-secondary"
+              onClick={() => navigate('/employee/profile')}
+            >
+              View Full Profile
+            </button>
           </div>
         </div>
 
+        {/* Quick Actions Card */}
         <div className="card">
-          <h2>Request Leave</h2>
-          {error && <div className="alert alert-error">{error}</div>}
-          {submitSuccess && (
-            <div className="alert alert-success">Leave request submitted successfully!</div>
-          )}
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="startDate">Start Date</label>
-              <input
-                type="date"
-                id="startDate"
-                name="startDate"
-                value={formData.startDate}
-                onChange={handleChange}
-                className="form-control"
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="endDate">End Date</label>
-              <input
-                type="date"
-                id="endDate"
-                name="endDate"
-                value={formData.endDate}
-                onChange={handleChange}
-                className="form-control"
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="reason">Reason</label>
-              <textarea
-                id="reason"
-                name="reason"
-                value={formData.reason}
-                onChange={handleChange}
-                className="form-control"
-                rows="3"
-                required
-              />
-            </div>
-            <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-              {isSubmitting ? 'Submitting...' : 'Submit Request'}
+          <h2>Quick Actions</h2>
+          <div className="quick-actions">
+            <button 
+              className="btn btn-primary"
+              onClick={() => navigate('/employee/leave-request')}
+            >
+              Request Leave
             </button>
-          </form>
+            <button 
+              className="btn btn-secondary"
+              onClick={() => navigate('/employee/policy')}
+            >
+              View Policies
+            </button>
+          </div>
         </div>
       </div>
 
+      {/* Leave Request Stats */}
       <div className="card">
         <h2>My Leave Requests</h2>
+        <div className="stats-grid" style={{ marginBottom: '1rem' }}>
+          <div className="stat-card">
+            <div className="stat-number">{stats.total}</div>
+            <div className="stat-label">Total Requests</div>
+          </div>
+          <div className="stat-card stat-pending">
+            <div className="stat-number">{stats.pending}</div>
+            <div className="stat-label">Pending</div>
+          </div>
+          <div className="stat-card stat-approved">
+            <div className="stat-number">{stats.approved}</div>
+            <div className="stat-label">Approved</div>
+          </div>
+          <div className="stat-card stat-denied">
+            <div className="stat-number">{stats.denied}</div>
+            <div className="stat-label">Denied</div>
+          </div>
+        </div>
+
         {isLoading ? (
           <div className="loading">Loading leave requests...</div>
         ) : leaveRequests.length === 0 ? (
-          <p className="empty-state">No leave requests found.</p>
+          <div className="empty-state">
+            <p>You haven't submitted any leave requests yet.</p>
+            <button 
+              className="btn btn-primary"
+              style={{ marginTop: '1rem' }}
+              onClick={() => navigate('/employee/leave-request')}
+            >
+              Submit Your First Request
+            </button>
+          </div>
         ) : (
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Reason</th>
-                <th>Status</th>
-                <th>Submitted</th>
-              </tr>
-            </thead>
-            <tbody>
-              {leaveRequests.map((request) => (
-                <tr key={request.id}>
-                  <td>{request.startDate}</td>
-                  <td>{request.endDate}</td>
-                  <td>{request.reason}</td>
-                  <td>
-                    <StatusBadge status={request.status} />
-                  </td>
-                  <td>{new Date(request.createdAt).toLocaleDateString()}</td>
+          <div className="table-container">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Reason</th>
+                  <th>Status</th>
+                  <th>Submitted</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {leaveRequests.map(request => (
+                  <tr key={request.id}>
+                    <td>{request.startDate}</td>
+                    <td>{request.endDate}</td>
+                    <td>{request.reason}</td>
+                    <td>{getStatusBadge(request.status)}</td>
+                    <td>{request.createdAt ? new Date(request.createdAt).toLocaleDateString() : '-'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>
