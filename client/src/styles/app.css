@@ -591,6 +591,51 @@ select.form-control {
   background-color: var(--color-gray-50);
 }
 
+/* Sortable Headers */
+.sortable-header {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color var(--transition-fast);
+}
+
+.sortable-header:hover {
+  background-color: var(--color-gray-200);
+}
+
+/* Table Footer */
+.table-footer {
+  padding: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-600);
+  border-top: 1px solid var(--color-gray-300);
+  background-color: var(--color-gray-50);
+}
+
+/* Filter Bar */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.filter-bar label {
+  font-weight: 500;
+  color: var(--color-gray-700);
+  white-space: nowrap;
+}
+
+.filter-select {
+  width: auto;
+  min-width: 150px;
+}
+
+/* Text muted */
+.text-muted {
+  color: var(--color-gray-500);
+}
+
 /* =============================================================================
    9. MODALS & DIALOGS
    ============================================================================= */

@@ -6,87 +6,184 @@ import { createLeaveRequest } from '../api/leaveRequests';
 function EmployeeLeaveRequest() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
   const [formData, setFormData] = useState({
     startDate: '',
     endDate: '',
-    reason: '',
+    reason: ''
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
+  const [dateError, setDateError] = useState('');
 
-  const handleChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // Clear date error when user changes dates
+    if (name === 'startDate' || name === 'endDate') {
+      setDateError('');
+    }
+  };
+
+  const validateDates = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const start = new Date(formData.startDate);
+    const end = new Date(formData.endDate);
+
+    if (start < today) {
+      setDateError('Start date cannot be in the past');
+      return false;
+    }
+
+    if (end < start) {
+      setDateError('End date cannot be before start date');
+      return false;
+    }
+
+    // Optional: limit max leave duration (e.g., 30 days)
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (diffDays > 30) {
+      setDateError('Leave request cannot exceed 30 days');
+      return false;
+    }
+
+    return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setError('');
+    setDateError('');
+
+    if (!validateDates()) {
+      return;
+    }
+
+    setIsLoading(true);
 
     try {
       await createLeaveRequest({
         employeeId: user.id,
-        ...formData,
+        startDate: formData.startDate,
+        endDate: formData.endDate,
+        reason: formData.reason
       });
       setSuccess(true);
-      setFormData({ startDate: '', endDate: '', reason: '' });
+      setTimeout(() => {
+        navigate('/employee');
+      }, 2000);
     } catch (err) {
-      setError('Failed to submit leave request.');
+      setError('Failed to submit leave request. Please try again.');
     } finally {
-      setIsSubmitting(false);
+      setIsLoading(false);
     }
   };
+
+  // Calculate number of days for display
+  const calculateDays = () => {
+    if (formData.startDate && formData.endDate) {
+      const start = new Date(formData.startDate);
+      const end = new Date(formData.endDate);
+      if (end >= start) {
+        const diffTime = Math.abs(end - start);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+        return diffDays;
+      }
+    }
+    return 0;
+  };
+
+  const days = calculateDays();
+
+  if (success) {
+    return (
+      <div className="page-container">
+        <div className="success-dialog">
+          <div className="success-icon">✓</div>
+          <h2>Request Submitted!</h2>
+          <p>Your leave request has been submitted for approval.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="dashboard">
       <h1>Request Leave</h1>
-      <div className="card">
+      
+      <div className="card" style={{ maxWidth: '500px' }}>
         {error && <div className="alert alert-error">{error}</div>}
-        {success && (
-          <div className="alert alert-success">Leave request submitted successfully!</div>
-        )}
+        
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="startDate">Start Date</label>
+            <label>Start Date *</label>
             <input
               type="date"
-              id="startDate"
               name="startDate"
               value={formData.startDate}
-              onChange={handleChange}
+              onChange={handleInputChange}
               className="form-control"
+              min={new Date().toISOString().split('T')[0]}
               required
             />
           </div>
+          
           <div className="form-group">
-            <label htmlFor="endDate">End Date</label>
+            <label>End Date *</label>
             <input
               type="date"
-              id="endDate"
               name="endDate"
               value={formData.endDate}
-              onChange={handleChange}
+              onChange={handleInputChange}
               className="form-control"
+              min={formData.startDate || new Date().toISOString().split('T')[0]}
               required
             />
           </div>
+
+          {dateError && (
+            <div className="alert alert-error">{dateError}</div>
+          )}
+
+          {days > 0 && !dateError && (
+            <div className="alert alert-success">
+              Total: {days} day{days > 1 ? 's' : ''}
+            </div>
+          )}
+          
           <div className="form-group">
-            <label htmlFor="reason">Reason</label>
+            <label>Reason *</label>
             <textarea
-              id="reason"
               name="reason"
               value={formData.reason}
-              onChange={handleChange}
+              onChange={handleInputChange}
               className="form-control"
-              rows="3"
+              rows="4"
+              placeholder="Please provide a reason for your leave request..."
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-            {isSubmitting ? 'Submitting...' : 'Submit Request'}
-          </button>
+          
+          <div className="action-buttons">
+            <button 
+              type="button" 
+              className="btn btn-secondary"
+              onClick={() => navigate('/employee')}
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              className="btn btn-primary"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Submitting...' : 'Submit Request'}
+            </button>
+          </div>
         </form>
       </div>
     </div>
