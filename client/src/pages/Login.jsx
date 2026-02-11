@@ -19,7 +19,14 @@ function Login() {
     setIsLoading(true);
 
     try {
-      if (role === 'hr') {
+      // Check for admin login
+      if (username === 'admin' && password === 'admin') {
+        login({ id: 0, name: 'Administrator', email: 'admin@company.com' }, 'admin');
+        setShowSuccess(true);
+        setTimeout(() => {
+          navigate('/admin');
+        }, 1500);
+      } else if (role === 'hr') {
         login({ id: 0, name: 'HR Admin', email: 'hr@company.com' }, 'hr');
         setShowSuccess(true);
         setTimeout(() => {
@@ -35,11 +42,11 @@ function Login() {
           }, 1500);
         } else {
           setError('Employee not found. Please check your username or sign up.');
+          setIsLoading(false);
         }
       }
     } catch (err) {
       setError('Login failed. Please try again.');
-    } finally {
       setIsLoading(false);
     }
   };
@@ -99,9 +106,9 @@ function Login() {
         </div>
         <div className="demo-credentials">
           <strong>Demo Credentials:</strong>
+          <p><strong>Admin:</strong> admin / admin</p>
           <p><strong>HR:</strong> Select "HR" and click Login</p>
-          <p><strong>Employee:</strong> Select "Employee" and enter:</p>
-          <p>john.smith@company.com</p>
+          <p><strong>Employee:</strong> john.smith@company.com</p>
         </div>
       </div>
 
