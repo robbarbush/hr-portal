@@ -92,6 +92,9 @@
   
   /* Transitions */
   --transition-fast: 0.2s ease;
+  
+  /* Layout */
+  --navbar-height: 60px;
 }
 
 /* =============================================================================
@@ -105,12 +108,19 @@
   box-sizing: border-box;
 }
 
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   font-family: var(--font-family);
   font-size: var(--font-size-sm);
   line-height: var(--line-height);
   color: var(--color-gray-800);
   background-color: var(--color-gray-100);
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 a {
@@ -120,6 +130,11 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
 }
 
 /* =============================================================================
@@ -133,18 +148,22 @@ a:hover {
 
 .main-content {
   flex: 1;
+  width: 100%;
 }
 
 .page-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 70px);
-  padding: var(--spacing-xl);
+  min-height: calc(100vh - var(--navbar-height));
+  padding: var(--spacing-md);
 }
 
 .dashboard {
-  padding: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .dashboard h1 {
@@ -156,7 +175,7 @@ a:hover {
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: var(--spacing-lg);
   margin-bottom: var(--spacing-lg);
 }
@@ -168,17 +187,25 @@ a:hover {
   background-color: var(--color-gray-200);
   padding: var(--spacing-sm) var(--spacing-md);
   border-bottom: 1px solid var(--color-gray-300);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  min-height: var(--navbar-height);
 }
 
 .navbar-container {
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .navbar-logo {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .logo-circle {
@@ -204,9 +231,42 @@ a:hover {
   font-size: 8px !important;
 }
 
+/* Mobile Menu Toggle */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--spacing-sm);
+  z-index: 101;
+}
+
+.menu-toggle span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: var(--color-gray-800);
+  margin: 5px 0;
+  transition: var(--transition-fast);
+  border-radius: 2px;
+}
+
+.menu-toggle.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
 .navbar-links {
   display: flex;
   gap: 0;
+  align-items: center;
 }
 
 .nav-link {
@@ -216,6 +276,7 @@ a:hover {
   font-size: var(--font-size-sm);
   border: 1px solid transparent;
   transition: background-color var(--transition-fast);
+  white-space: nowrap;
 }
 
 .nav-link:hover {
@@ -242,6 +303,7 @@ a:hover {
   border-radius: var(--border-radius-sm);
   cursor: pointer;
   transition: background-color var(--transition-fast);
+  white-space: nowrap;
 }
 
 .btn:hover {
@@ -306,6 +368,7 @@ a:hover {
 .action-buttons {
   display: flex;
   gap: var(--spacing-sm);
+  flex-wrap: wrap;
 }
 
 /* =============================================================================
@@ -325,22 +388,33 @@ a:hover {
 
 .form-control {
   width: 100%;
-  padding: var(--spacing-sm);
-  font-size: var(--font-size-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-base);
   font-family: inherit;
   border: 1px solid var(--color-gray-400);
   border-radius: var(--border-radius-sm);
   transition: border-color var(--transition-fast);
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .form-control:focus {
   outline: none;
   border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
 
 textarea.form-control {
   resize: vertical;
-  min-height: 80px;
+  min-height: 100px;
+}
+
+select.form-control {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23333' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  padding-right: 2.5rem;
 }
 
 /* Role Selector (Radio Buttons) */
@@ -354,13 +428,16 @@ textarea.form-control {
 .radio-label {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
   font-size: var(--font-size-sm);
   cursor: pointer;
+  padding: var(--spacing-sm);
 }
 
 .radio-label input[type="radio"] {
   cursor: pointer;
+  width: 18px;
+  height: 18px;
 }
 
 /* Form Footer */
@@ -397,7 +474,7 @@ textarea.form-control {
 /* Login Card */
 .login-card {
   background: var(--color-white);
-  padding: var(--spacing-xl) calc(var(--spacing-xl) + var(--spacing-sm));
+  padding: var(--spacing-xl);
   border: 1px solid var(--color-danger);
   border-radius: var(--border-radius-sm);
   width: 100%;
@@ -419,7 +496,7 @@ textarea.form-control {
 /* Signup / Form Card */
 .form-card {
   background: var(--color-white);
-  padding: var(--spacing-xl);
+  padding: var(--spacing-lg);
   border-radius: var(--border-radius-md);
   box-shadow: var(--shadow-md);
   width: 100%;
@@ -452,6 +529,7 @@ textarea.form-control {
 .demo-credentials p {
   margin: var(--spacing-xs) 0;
   color: var(--color-alert-info-text);
+  word-break: break-word;
 }
 
 /* Profile Info */
@@ -463,22 +541,31 @@ textarea.form-control {
 
 .profile-row {
   display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
 }
 
 .profile-row .label {
   font-weight: 500;
   color: var(--color-gray-600);
-  width: 120px;
+  min-width: 100px;
   flex-shrink: 0;
 }
 
 .profile-row .value {
   color: var(--color-gray-800);
+  word-break: break-word;
 }
 
 /* =============================================================================
    8. TABLES
    ============================================================================= */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -497,6 +584,7 @@ textarea.form-control {
   background-color: var(--color-gray-50);
   font-weight: 600;
   color: var(--color-gray-800);
+  white-space: nowrap;
 }
 
 .table tbody tr:hover {
@@ -517,13 +605,16 @@ textarea.form-control {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: var(--spacing-md);
 }
 
 .modal {
   background: var(--color-white);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--border-radius-md);
   width: 100%;
   max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
   box-shadow: var(--shadow-lg);
 }
 
@@ -533,6 +624,9 @@ textarea.form-control {
   align-items: center;
   padding: var(--spacing-md) var(--spacing-lg);
   border-bottom: 1px solid var(--color-gray-300);
+  position: sticky;
+  top: 0;
+  background: var(--color-white);
 }
 
 .modal-header h2 {
@@ -548,7 +642,8 @@ textarea.form-control {
   cursor: pointer;
   color: var(--color-gray-600);
   line-height: 1;
-  padding: 0;
+  padding: var(--spacing-sm);
+  margin: calc(-1 * var(--spacing-sm));
 }
 
 .modal-close:hover {
@@ -569,15 +664,18 @@ textarea.form-control {
   gap: var(--spacing-sm);
   padding: var(--spacing-md) var(--spacing-lg);
   border-top: 1px solid var(--color-gray-300);
+  flex-wrap: wrap;
 }
 
 /* Success Dialog */
 .success-dialog {
   background: var(--color-white);
   border-radius: var(--border-radius-md);
-  padding: var(--spacing-xl) calc(var(--spacing-xl) + var(--spacing-md));
+  padding: var(--spacing-xl);
   text-align: center;
   box-shadow: var(--shadow-lg);
+  max-width: 90%;
+  width: 320px;
 }
 
 .success-icon {
@@ -616,6 +714,7 @@ textarea.form-control {
   font-weight: 500;
   text-transform: capitalize;
   border-radius: var(--border-radius-sm);
+  white-space: nowrap;
 }
 
 .badge-pending {
@@ -637,7 +736,7 @@ textarea.form-control {
    11. ALERTS
    ============================================================================= */
 .alert {
-  padding: 0.75rem var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
   border-radius: var(--border-radius-sm);
   margin-bottom: var(--spacing-md);
   font-size: var(--font-size-sm);
@@ -661,9 +760,11 @@ textarea.form-control {
 
 /* HR Dashboard */
 .hr-dashboard {
-  padding: var(--spacing-md) var(--spacing-xl);
+  padding: var(--spacing-md) var(--spacing-lg);
   background-color: var(--color-white);
-  min-height: calc(100vh - 70px);
+  min-height: calc(100vh - var(--navbar-height));
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .dashboard-header {
@@ -671,6 +772,8 @@ textarea.form-control {
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
 }
 
 .dashboard-title {
@@ -688,6 +791,7 @@ textarea.form-control {
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
+  padding: var(--spacing-sm);
 }
 
 .logout-btn:hover {
@@ -752,20 +856,69 @@ textarea.form-control {
   color: var(--color-gray-500);
 }
 
+.text-center {
+  text-align: center;
+}
+
+.hidden {
+  display: none !important;
+}
+
 /* =============================================================================
    14. RESPONSIVE
    ============================================================================= */
+
+/* Tablet (768px and below) */
 @media (max-width: 768px) {
+  :root {
+    --navbar-height: auto;
+  }
+
+  /* Navigation */
+  .navbar {
+    padding: var(--spacing-sm);
+  }
+
   .navbar-container {
-    flex-direction: column;
-    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+  }
+
+  .menu-toggle {
+    display: block;
   }
 
   .navbar-links {
-    flex-wrap: wrap;
-    justify-content: center;
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    background-color: var(--color-gray-200);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border-top: 1px solid var(--color-gray-300);
+    box-shadow: var(--shadow-md);
   }
 
+  .navbar-links.active {
+    display: flex;
+  }
+
+  .nav-link {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--color-gray-300);
+    text-align: center;
+  }
+
+  .nav-link:last-child {
+    border-bottom: none;
+  }
+
+  .navbar {
+    position: relative;
+  }
+
+  /* Layout */
   .dashboard {
     padding: var(--spacing-md);
   }
@@ -774,21 +927,182 @@ textarea.form-control {
     grid-template-columns: 1fr;
   }
 
-  .modal {
-    margin: var(--spacing-md);
-    max-width: calc(100% - var(--spacing-xl));
+  .page-container {
+    padding: var(--spacing-md);
+    align-items: flex-start;
+    padding-top: var(--spacing-xl);
   }
 
-  .table {
-    font-size: var(--font-size-xs);
+  /* Cards */
+  .card {
+    padding: var(--spacing-md);
+  }
+
+  .login-card {
+    padding: var(--spacing-lg);
+  }
+
+  .form-card {
+    padding: var(--spacing-md);
+  }
+
+  /* Tables - horizontal scroll */
+  .table-container {
+    margin: 0 calc(-1 * var(--spacing-md));
+    padding: 0 var(--spacing-md);
   }
 
   .table th,
   .table td {
     padding: var(--spacing-sm);
+    font-size: var(--font-size-xs);
+  }
+
+  /* Modal */
+  .modal {
+    margin: var(--spacing-sm);
+    max-width: calc(100% - var(--spacing-md));
+    max-height: 85vh;
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding: var(--spacing-md);
+  }
+
+  .modal-footer {
+    flex-direction: column;
+  }
+
+  .modal-footer .btn {
+    width: 100%;
+  }
+
+  /* HR Dashboard */
+  .hr-dashboard {
+    padding: var(--spacing-md);
+  }
+
+  .add-employee-card {
+    width: 100%;
+  }
+
+  /* Action Buttons */
+  .action-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .action-buttons .btn {
+    width: 100%;
+  }
+}
+
+/* Mobile (480px and below) */
+@media (max-width: 480px) {
+  html {
+    font-size: 14px;
+  }
+
+  /* Forms */
+  .role-selector {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    align-items: center;
+  }
+
+  .radio-label {
+    width: 100%;
+    justify-content: center;
+    background-color: var(--color-gray-50);
+    border-radius: var(--border-radius-sm);
+  }
+
+  /* Profile */
+  .profile-row {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .profile-row .label {
+    min-width: auto;
+  }
+
+  /* Dashboard Header */
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Login Card */
+  .login-card h1 {
+    font-size: var(--font-size-lg);
+  }
+
+  /* Success Dialog */
+  .success-dialog {
+    padding: var(--spacing-lg);
+  }
+
+  .success-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+  }
+}
+
+/* Large screens (1200px and above) */
+@media (min-width: 1200px) {
+  .dashboard {
+    padding: var(--spacing-xl) var(--spacing-xl);
   }
 
   .hr-dashboard {
-    padding: var(--spacing-md);
+    padding: var(--spacing-lg) var(--spacing-xl);
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .nav-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .form-control {
+    min-height: 44px;
+  }
+
+  .radio-label {
+    min-height: 44px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .navbar,
+  .menu-toggle,
+  .btn,
+  .action-buttons,
+  .modal-overlay {
+    display: none !important;
+  }
+
+  .dashboard,
+  .hr-dashboard {
+    padding: 0;
+  }
+
+  .card {
+    box-shadow: none;
+    border: 1px solid var(--color-gray-300);
   }
 }
