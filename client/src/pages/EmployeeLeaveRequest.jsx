@@ -3,6 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { createLeaveRequest } from '../api/leaveRequests';
 
+const LEAVE_TYPES = [
+  'Annual Leave',
+  'Sick Leave',
+  'Personal Leave',
+  'Bereavement Leave',
+  'Maternity/Paternity Leave',
+  'Unpaid Leave',
+  'Other'
+];
+
 function EmployeeLeaveRequest() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -10,6 +20,7 @@ function EmployeeLeaveRequest() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [formData, setFormData] = useState({
+    leaveType: '',
     startDate: '',
     endDate: '',
     reason: ''
@@ -72,6 +83,11 @@ function EmployeeLeaveRequest() {
     setError('');
     setDateError('');
 
+    if (!formData.leaveType) {
+      setError('Please select a leave type');
+      return;
+    }
+
     if (!validateDates()) {
       return;
     }
@@ -81,6 +97,7 @@ function EmployeeLeaveRequest() {
     try {
       await createLeaveRequest({
         employeeId: user.id,
+        leaveType: formData.leaveType,
         startDate: formData.startDate,
         endDate: formData.endDate,
         reason: formData.reason
@@ -132,6 +149,22 @@ function EmployeeLeaveRequest() {
         {error && <div className="alert alert-error">{error}</div>}
         
         <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Leave Type *</label>
+            <select
+              name="leaveType"
+              value={formData.leaveType}
+              onChange={handleInputChange}
+              className="form-control"
+              required
+            >
+              <option value="">-- Select Leave Type --</option>
+              {LEAVE_TYPES.map(type => (
+                <option key={type} value={type}>{type}</option>
+              ))}
+            </select>
+          </div>
+
           <div className="form-group">
             <label>Start Date *</label>
             <input

@@ -23,6 +23,12 @@ function EmployeeProfile() {
     <div className="dashboard">
       <div className="dashboard-header">
         <h1>My Profile</h1>
+        <button 
+          className="btn btn-primary"
+          onClick={() => navigate('/employee/edit-profile')}
+        >
+          Edit Profile
+        </button>
       </div>
 
       <div className="card">

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllEmployees, createEmployee } from '../api/employees';
 import { getAllLeaveRequests } from '../api/leaveRequests';
+import { getAllServiceRequests } from '../api/serviceRequests';
 
 const STATUS_OPTIONS = [
   'Probationary',
@@ -27,9 +28,9 @@ function HRDashboard() {
   const [error, setError] = useState('');
   const [stats, setStats] = useState({
     totalEmployees: 0,
-    pendingRequests: 0,
-    approvedRequests: 0,
-    deniedRequests: 0,
+    activeEmployees: 0,
+    pendingLeaveRequests: 0,
+    pendingServiceRequests: 0,
     needsAttention: 0
   });
   const [statsLoading, setStatsLoading] = useState(true);
@@ -50,18 +51,20 @@ function HRDashboard() {
 
   const fetchStats = async () => {
     try {
-      const [employees, leaveRequests] = await Promise.all([
+      const [employees, leaveRequests, serviceRequests] = await Promise.all([
         getAllEmployees(),
-        getAllLeaveRequests()
+        getAllLeaveRequests(),
+        getAllServiceRequests()
       ]);
 
       const needsAttention = employees.filter(emp => !emp.status || emp.status === '').length;
+      const activeEmployees = employees.filter(emp => emp.status === 'Active').length;
 
       setStats({
         totalEmployees: employees.length,
-        pendingRequests: leaveRequests.filter(r => r.status === 'pending').length,
-        approvedRequests: leaveRequests.filter(r => r.status === 'approved').length,
-        deniedRequests: leaveRequests.filter(r => r.status === 'denied').length,
+        activeEmployees,
+        pendingLeaveRequests: leaveRequests.filter(r => r.status === 'pending').length,
+        pendingServiceRequests: serviceRequests.filter(r => r.status === 'pending').length,
         needsAttention
       });
     } catch (error) {
@@ -119,17 +122,17 @@ function HRDashboard() {
               <div className="stat-number">{stats.totalEmployees}</div>
               <div className="stat-label">Total Employees</div>
             </div>
-            <div className="stat-card stat-pending">
-              <div className="stat-number">{stats.pendingRequests}</div>
-              <div className="stat-label">Pending Requests</div>
-            </div>
             <div className="stat-card stat-approved">
-              <div className="stat-number">{stats.approvedRequests}</div>
-              <div className="stat-label">Approved</div>
+              <div className="stat-number">{stats.activeEmployees}</div>
+              <div className="stat-label">Active Employees</div>
             </div>
-            <div className="stat-card stat-denied">
-              <div className="stat-number">{stats.deniedRequests}</div>
-              <div className="stat-label">Denied</div>
+            <div className="stat-card stat-pending">
+              <div className="stat-number">{stats.pendingLeaveRequests}</div>
+              <div className="stat-label">Pending Leave</div>
+            </div>
+            <div className="stat-card stat-pending">
+              <div className="stat-number">{stats.pendingServiceRequests}</div>
+              <div className="stat-label">Pending Service</div>
             </div>
             {stats.needsAttention > 0 && (
               <div className="stat-card stat-attention">
@@ -162,7 +165,10 @@ function HRDashboard() {
             Manage Employees
           </button>
           <button className="btn btn-secondary" onClick={() => navigate('/hr/leave-requests')}>
-            Manage Leave Requests
+            Leave Requests
+          </button>
+          <button className="btn btn-secondary" onClick={() => navigate('/hr/service-requests')}>
+            Service Requests
           </button>
         </div>
       </div>

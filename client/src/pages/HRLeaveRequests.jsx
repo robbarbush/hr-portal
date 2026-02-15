@@ -91,10 +91,11 @@ function HRLeaveRequests() {
 
   // Export to CSV
   const exportToCSV = () => {
-    const headers = ['ID', 'Employee', 'Start Date', 'End Date', 'Reason', 'Status', 'Created At'];
+    const headers = ['ID', 'Employee', 'Leave Type', 'Start Date', 'End Date', 'Reason', 'Status', 'Created At'];
     const rows = sortedRequests.map(req => [
       req.id,
       getEmployeeName(req.employeeId),
+      req.leaveType || 'Leave',
       req.startDate,
       req.endDate,
       req.reason,
@@ -164,11 +165,14 @@ function HRLeaveRequests() {
                 <th onClick={() => handleSort('employeeName')} className="sortable-header">
                   Employee {getSortIcon('employeeName')}
                 </th>
+                <th onClick={() => handleSort('leaveType')} className="sortable-header">
+                  Type {getSortIcon('leaveType')}
+                </th>
                 <th onClick={() => handleSort('startDate')} className="sortable-header">
-                  Start Date {getSortIcon('startDate')}
+                  Start {getSortIcon('startDate')}
                 </th>
                 <th onClick={() => handleSort('endDate')} className="sortable-header">
-                  End Date {getSortIcon('endDate')}
+                  End {getSortIcon('endDate')}
                 </th>
                 <th>Reason</th>
                 <th onClick={() => handleSort('status')} className="sortable-header">
@@ -180,13 +184,14 @@ function HRLeaveRequests() {
             <tbody>
               {sortedRequests.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className="empty-state">No leave requests found.</td>
+                  <td colSpan="8" className="empty-state">No leave requests found.</td>
                 </tr>
               ) : (
                 sortedRequests.map(request => (
                   <tr key={request.id}>
                     <td>{request.id}</td>
                     <td>{getEmployeeName(request.employeeId)}</td>
+                    <td>{request.leaveType || 'Leave'}</td>
                     <td>{request.startDate}</td>
                     <td>{request.endDate}</td>
                     <td>{request.reason}</td>

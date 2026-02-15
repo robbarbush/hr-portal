@@ -119,6 +119,12 @@ function EmployeeDashboard() {
               Request Leave
             </button>
             <button 
+              className="btn btn-primary"
+              onClick={() => navigate('/employee/service-request')}
+            >
+              Service Request
+            </button>
+            <button 
               className="btn btn-secondary"
               onClick={() => navigate('/employee/policy')}
             >
@@ -168,21 +174,21 @@ function EmployeeDashboard() {
             <table className="table">
               <thead>
                 <tr>
+                  <th>Type</th>
                   <th>Start Date</th>
                   <th>End Date</th>
                   <th>Reason</th>
                   <th>Status</th>
-                  <th>Submitted</th>
                 </tr>
               </thead>
               <tbody>
                 {leaveRequests.map(request => (
                   <tr key={request.id}>
+                    <td>{request.leaveType || 'Leave'}</td>
                     <td>{request.startDate}</td>
                     <td>{request.endDate}</td>
                     <td>{request.reason}</td>
                     <td>{getStatusBadge(request.status)}</td>
-                    <td>{request.createdAt ? new Date(request.createdAt).toLocaleDateString() : '-'}</td>
                   </tr>
                 ))}
               </tbody>

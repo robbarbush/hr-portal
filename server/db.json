@@ -60,6 +60,7 @@
     {
       "id": 1,
       "employeeId": 1,
+      "leaveType": "Annual Leave",
       "startDate": "2024-03-01",
       "endDate": "2024-03-05",
       "reason": "Family vacation",
@@ -69,15 +70,17 @@
     {
       "id": 2,
       "employeeId": 2,
+      "leaveType": "Sick Leave",
       "startDate": "2024-04-10",
       "endDate": "2024-04-12",
       "reason": "Medical appointment",
-      "status": "pending",
+      "status": "approved",
       "createdAt": "2024-03-20T14:00:00.000Z"
     },
     {
       "id": 3,
       "employeeId": 3,
+      "leaveType": "Personal Leave",
       "startDate": "2024-02-01",
       "endDate": "2024-02-28",
       "reason": "Personal leave",
@@ -87,11 +90,59 @@
     {
       "id": 4,
       "employeeId": 1,
+      "leaveType": "Other",
       "startDate": "2024-05-20",
       "endDate": "2024-05-22",
       "reason": "Conference attendance",
       "status": "pending",
       "createdAt": "2024-04-01T11:30:00.000Z"
+    }
+  ],
+  "serviceRequests": [
+    {
+      "id": 1,
+      "employeeId": 1,
+      "employeeName": "John Smith",
+      "requestType": "Update Personal Info",
+      "description": "Please update my phone number to 555-0199",
+      "status": "resolved",
+      "createdAt": "2024-02-10T09:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "employeeId": 2,
+      "employeeName": "Sarah Johnson",
+      "requestType": "IT Support",
+      "description": "Need access to marketing analytics dashboard",
+      "status": "pending",
+      "createdAt": "2024-02-12T11:30:00.000Z"
+    },
+    {
+      "id": 3,
+      "employeeId": 1,
+      "employeeName": "John Smith",
+      "requestType": "HR Support",
+      "description": "Question about benefits enrollment deadline",
+      "status": "in-progress",
+      "createdAt": "2024-02-14T14:00:00.000Z"
+    },
+    {
+      "id": 4,
+      "employeeId": 3,
+      "employeeName": "Michael Chen",
+      "requestType": "Equipment Request",
+      "description": "Requesting a second monitor for home office setup",
+      "status": "pending",
+      "createdAt": "2024-02-15T10:00:00.000Z"
+    },
+    {
+      "employeeId": 1,
+      "employeeName": "John Smith",
+      "requestType": "IT Support",
+      "description": "sdfsdfds keyboard no working",
+      "status": "pending",
+      "createdAt": "2026-02-12T17:08:21.479Z",
+      "id": 5
     }
   ],
   "activityLogs": [
@@ -181,27 +232,9 @@
       "username": "Sarah Johnson",
       "email": "sarah.johnson@company.com",
       "role": "employee",
-      "action": "Submitted Leave Request",
-      "details": "Submitted leave request for 2024-04-10 to 2024-04-12",
+      "action": "Submitted Service Request",
+      "details": "Submitted IT Support request",
       "timestamp": "2024-02-11T08:45:00.000Z"
-    },
-    {
-      "username": "HR Admin",
-      "email": "hr@company.com",
-      "role": "hr",
-      "action": "Login",
-      "details": "User logged in as hr",
-      "timestamp": "2026-02-11T22:37:33.162Z",
-      "id": 11
-    },
-    {
-      "username": "HR Admin",
-      "email": "hr@company.com",
-      "role": "hr",
-      "action": "Logout",
-      "details": "User logged out",
-      "timestamp": "2026-02-11T22:37:53.335Z",
-      "id": 12
     },
     {
       "username": "John Smith",
@@ -209,8 +242,8 @@
       "role": "employee",
       "action": "Login",
       "details": "User logged in as employee",
-      "timestamp": "2026-02-11T22:38:13.561Z",
-      "id": 13
+      "timestamp": "2026-02-12T17:08:04.750Z",
+      "id": 11
     },
     {
       "username": "John Smith",
@@ -218,7 +251,25 @@
       "role": "employee",
       "action": "Logout",
       "details": "User logged out",
-      "timestamp": "2026-02-11T22:38:28.218Z",
+      "timestamp": "2026-02-12T17:08:39.392Z",
+      "id": 12
+    },
+    {
+      "username": "HR Admin",
+      "email": "hr@company.com",
+      "role": "hr",
+      "action": "Login",
+      "details": "User logged in as hr",
+      "timestamp": "2026-02-12T17:08:43.916Z",
+      "id": 13
+    },
+    {
+      "username": "HR Admin",
+      "email": "hr@company.com",
+      "role": "hr",
+      "action": "Logout",
+      "details": "User logged out",
+      "timestamp": "2026-02-12T17:09:38.881Z",
       "id": 14
     },
     {
@@ -227,7 +278,7 @@
       "role": "admin",
       "action": "Login",
       "details": "User logged in as admin",
-      "timestamp": "2026-02-11T22:38:32.987Z",
+      "timestamp": "2026-02-12T17:09:43.910Z",
       "id": 15
     },
     {
@@ -236,26 +287,8 @@
       "role": "admin",
       "action": "Logout",
       "details": "User logged out",
-      "timestamp": "2026-02-11T22:39:11.618Z",
+      "timestamp": "2026-02-12T17:10:09.036Z",
       "id": 16
-    },
-    {
-      "username": "John Smith",
-      "email": "john.smith@company.com",
-      "role": "employee",
-      "action": "Login",
-      "details": "User logged in as employee",
-      "timestamp": "2026-02-11T22:39:27.777Z",
-      "id": 17
-    },
-    {
-      "username": "John Smith",
-      "email": "john.smith@company.com",
-      "role": "employee",
-      "action": "Logout",
-      "details": "User logged out",
-      "timestamp": "2026-02-11T22:44:15.105Z",
-      "id": 18
     },
     {
       "username": "HR Admin",
@@ -263,8 +296,8 @@
       "role": "hr",
       "action": "Login",
       "details": "User logged in as hr",
-      "timestamp": "2026-02-11T22:44:57.566Z",
-      "id": 19
+      "timestamp": "2026-02-12T20:51:36.679Z",
+      "id": 17
     },
     {
       "username": "HR Admin",
@@ -272,8 +305,35 @@
       "role": "hr",
       "action": "Logout",
       "details": "User logged out",
-      "timestamp": "2026-02-11T22:45:14.391Z",
+      "timestamp": "2026-02-12T20:52:19.474Z",
+      "id": 18
+    },
+    {
+      "username": "John Smith",
+      "email": "john.smith@company.com",
+      "role": "employee",
+      "action": "Login",
+      "details": "User logged in as employee",
+      "timestamp": "2026-02-12T20:52:26.964Z",
+      "id": 19
+    },
+    {
+      "username": "John Smith",
+      "email": "john.smith@company.com",
+      "role": "employee",
+      "action": "Logout",
+      "details": "User logged out",
+      "timestamp": "2026-02-12T20:52:47.974Z",
       "id": 20
+    },
+    {
+      "username": "Administrator",
+      "email": "admin@company.com",
+      "role": "admin",
+      "action": "Login",
+      "details": "User logged in as admin",
+      "timestamp": "2026-02-12T20:52:51.570Z",
+      "id": 21
     }
   ]
 }
