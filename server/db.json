@@ -96,6 +96,16 @@
       "reason": "Conference attendance",
       "status": "pending",
       "createdAt": "2024-04-01T11:30:00.000Z"
+    },
+    {
+      "employeeId": 1,
+      "leaveType": "Annual Leave",
+      "startDate": "2026-07-01",
+      "endDate": "2026-07-07",
+      "reason": "I need a vacation on the beach.",
+      "status": "denied",
+      "createdAt": "2026-02-15T17:26:55.747Z",
+      "id": 5
     }
   ],
   "serviceRequests": [
@@ -334,6 +344,60 @@
       "details": "User logged in as admin",
       "timestamp": "2026-02-12T20:52:51.570Z",
       "id": 21
+    },
+    {
+      "username": "HR Admin",
+      "email": "hr@company.com",
+      "role": "hr",
+      "action": "Login",
+      "details": "User logged in as hr",
+      "timestamp": "2026-02-15T17:24:21.460Z",
+      "id": 22
+    },
+    {
+      "username": "HR Admin",
+      "email": "hr@company.com",
+      "role": "hr",
+      "action": "Logout",
+      "details": "User logged out",
+      "timestamp": "2026-02-15T17:25:23.641Z",
+      "id": 23
+    },
+    {
+      "username": "John Smith",
+      "email": "john.smith@company.com",
+      "role": "employee",
+      "action": "Login",
+      "details": "User logged in as employee",
+      "timestamp": "2026-02-15T17:25:30.576Z",
+      "id": 24
+    },
+    {
+      "username": "John Smith",
+      "email": "john.smith@company.com",
+      "role": "employee",
+      "action": "Logout",
+      "details": "User logged out",
+      "timestamp": "2026-02-15T17:27:09.635Z",
+      "id": 25
+    },
+    {
+      "username": "Administrator",
+      "email": "admin@company.com",
+      "role": "admin",
+      "action": "Login",
+      "details": "User logged in as admin",
+      "timestamp": "2026-02-15T17:27:13.984Z",
+      "id": 26
+    },
+    {
+      "username": "Administrator",
+      "email": "admin@company.com",
+      "role": "admin",
+      "action": "Logout",
+      "details": "User logged out",
+      "timestamp": "2026-02-15T17:27:42.429Z",
+      "id": 27
     }
   ]
 }

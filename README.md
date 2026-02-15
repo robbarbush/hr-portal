@@ -368,14 +368,6 @@ The application will run at `http://localhost:3000`
 - [x] Functional routing
 - [x] Protected routes
 
-## Screenshots (Required for Submission)
-
-1. Login Page
-2. HR Dashboard
-3. Add Employee Modal
-4. Leave Request Page
-5. Employee Dashboard
-
 ## Browser Support
 
 - Chrome (latest)
@@ -385,8 +377,8 @@ The application will run at `http://localhost:3000`
 
 ## Author
 
-[Your Name]
+Robert Barbush
 
 ## License
 
-This project is created for educational purposes as part of the Simplilearn Full Stack Development Program.
+This project is created for educational purposes as part of the Simplilearn Full Stack Development Program with Generative AI.
